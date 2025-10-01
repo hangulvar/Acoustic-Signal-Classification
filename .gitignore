@@ -1,3 +1,11 @@
+# ------------------------- #
+# My Project-Specific Files #
+# ------------------------- #
+/data/
+
+
+# --- Standard Python Template Below --- #
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -143,6 +151,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+
 
 # Spyder project settings
 .spyderproject
