@@ -1,8 +1,15 @@
 # ------------------------- #
 # My Project-Specific Files #
 # ------------------------- #
+# Ignore data files to avoid committing large datasets
 /data/
 
+
+# Workspace settings
+.vscode/
+Acoustic-Signal-Classification.code-workspace
+# ------------------------- #
+# ------------------------- #
 
 # --- Standard Python Template Below --- #
 
