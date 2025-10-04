@@ -267,8 +267,8 @@ def validate_dataset(csv_path: str):
 # Main execution
 if __name__ == '__main__':
     # --- Configuration ---
-    DATASET_DIRECTORY = 'path/to/your/dataset'  # ← CHANGE THIS!
-    OUTPUT_FILE = 'master_metadata.csv'
+    DATASET_DIRECTORY = 'data/Raw/DeepShip-main'  # ← CHANGE THIS!
+    OUTPUT_FILE = 'data/Processed/master_metadata.csv'
     # ---------------------
     
     print("🚀 Starting DeepShip Dataset Preprocessing")
