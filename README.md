@@ -6,3 +6,6 @@ The data has been taken from DeepShip repository: (https://github.com/irfankambo
 to four classes. The recordings have natural background noise, marine mammal sounds as well as Anthropogenic sounds.
 
 A more extensive dataset is available on google drive locations provided here: (https://github.com/irfankamboh/DeepShip/issues/1). 
+
+### Preprocessing
+The data has been labeled and appended into a materdata. Deleted duplicate ID rows from tanker-metafile.
