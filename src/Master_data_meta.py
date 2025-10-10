@@ -1,5 +1,9 @@
 #################################
 # Preprocessing Module - DeepShip 
+#--------------------------------
+#################################
+# 1. Maps audio files to metadata
+# 2. Validates file existence
 #################################
 #################################
 import pandas as pd
@@ -10,7 +14,6 @@ import warnings
 ############################################
 # this function appends metadata from all classes
 # and validates file existence
-# preprocess.py
 
 def create_master_metadata(dataset_path: str, output_csv: str, validate: bool = True):
     """
