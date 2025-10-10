@@ -120,7 +120,7 @@ for vessel in vessel_types:
             plt.colorbar(format='%+2.0f dB')
             plt.title(f'Log-Mel Spectrogram {vessel}')
             plt.tight_layout()
-            plt.savefig(f'Reports/test_spectrogram_{vessel}_{i}.png', dpi=150)
+            plt.savefig(f'Reports/test_spectrogram_{vessel}_{i}.png', dpi=150) # Check the figure then close to move on to the next
             plt.show() # Display inline if using a notebook
             print("✅ Visualization saved!")
         except FileNotFoundError:
