@@ -59,7 +59,7 @@ RANDOM_STATE = 42
 # FEATURE EXTRACTION PARAMETERS
 # ============================================================================
 
-# Spectrogram parameters (for reference - from your earlier preprocessing)
+# Spectrogram parameters (for reference)
 SAMPLE_RATE = 22050
 N_FFT = 2048
 HOP_LENGTH = 512
@@ -72,62 +72,64 @@ F_MAX = 11000
 # ============================================================================
 
 # SpecAugment - Time Masking
-TIME_MASK_RATIO_MIN = 0.05   # Minimum 5% of time frames
-TIME_MASK_RATIO_MAX = 0.15   # Maximum 15% of time frames
-N_TIME_MASKS = 2             # Number of time masks per spectrogram
+TIME_MASK_RATIO_MIN = 0.05
+TIME_MASK_RATIO_MAX = 0.15   # Reduced slightly to be less aggressive
+N_TIME_MASKS = 3
 
 # SpecAugment - Frequency Masking
-FREQ_MASK_RATIO_MIN = 0.05   # Minimum 5% of frequency bins
-FREQ_MASK_RATIO_MAX = 0.15   # Maximum 15% of frequency bins
-N_FREQ_MASKS = 2             # Number of frequency masks per spectrogram
+FREQ_MASK_RATIO_MIN = 0.05
+FREQ_MASK_RATIO_MAX = 0.15   # Reduced slightly to be less aggressive
+N_FREQ_MASKS = 3
 
 # Time shifting
-TIME_SHIFT_RANGE = 10        # Max frames to shift (±)
+TIME_SHIFT_RANGE = 10
 
 # Gaussian noise
 ADD_NOISE = True
-NOISE_STD = 0.01             # Standard deviation of noise
+NOISE_STD = 0.02
 
 # Augmentation probability
-AUGMENTATION_PROBABILITY = 0.8  # Apply augmentation 80% of the time
+AUGMENTATION_PROBABILITY = 0.8
 
 # ============================================================================
 # MODEL ARCHITECTURE PARAMETERS
 # ============================================================================
 
-# CNN architecture
-N_CLASSES = 4                # Cargo, Passenger, Tanker, Tug
-INPUT_CHANNELS = 1           # Single channel (log-mel spectrogram)
-DROPOUT_RATE = 0.5           # Dropout for regularization
+N_CLASSES = 4
+INPUT_CHANNELS = 1
+# Reduced dropout slightly. Goal is to first overfit, then regularize.
+DROPOUT_RATE = 0.4
 
 # ============================================================================
 # TRAINING PARAMETERS
 # ============================================================================
 
 # Optimization
-BATCH_SIZE = 8            # Batch size, CHANGE IF MEMORY ISSUES
-LEARNING_RATE = 1e-3
-WEIGHT_DECAY = 1e-4          # L2 regularization
+BATCH_SIZE = 32              # Switched to a power of 2, common practice
+# Increased LR significantly. 4e-5 is too low for training from scratch.
+# 3e-4 is a standard, robust starting point for Adam.
+LEARNING_RATE = 3e-4
+WEIGHT_DECAY = 1e-4          # Slightly reduced L2 regularization
 
 # Training schedule
-N_EPOCHS = 50
-EARLY_STOPPING_PATIENCE = 15  # Stop if no improvement for 15 epochs
+N_EPOCHS = 80
+EARLY_STOPPING_PATIENCE = 15
 
 # Learning rate scheduler
-LR_SCHEDULER_PATIENCE = 5    # Reduce LR if no improvement for 5 epochs
-LR_SCHEDULER_FACTOR = 0.5    # Multiply LR by this factor
+LR_SCHEDULER_PATIENCE = 5
+LR_SCHEDULER_FACTOR = 0.5
 
 # Class weighting
-USE_CLASS_WEIGHTS = True     # Use inverse frequency weighting for imbalanced data
+USE_CLASS_WEIGHTS = True
 
 # ============================================================================
 # DATALOADER PARAMETERS
 # ============================================================================
 
-NUM_WORKERS = 4              # Number of worker processes for data loading
-PIN_MEMORY = True            # Pin memory for faster GPU transfer (set False for CPU)
-SHUFFLE_TRAIN = True         # Shuffle training data
-DROP_LAST_TRAIN = True       # Drop incomplete batch in training
+NUM_WORKERS = 4
+PIN_MEMORY = True
+SHUFFLE_TRAIN = True
+DROP_LAST_TRAIN = True
 
 # ============================================================================
 # CHECKPOINTING AND LOGGING
@@ -157,19 +159,17 @@ FIGURE_FORMAT = 'png'
 # DEVICE CONFIGURATION
 # ============================================================================
 
-# Will be determined at runtime, but can be overridden
-# Options: 'cuda', 'cpu', 'mps' (for Apple Silicon)
-DEVICE = None  # Set to None for auto-detection
+DEVICE = None  # Auto-detection in training script
 
 # ============================================================================
-# VALIDATION
+# VALIDATION (No changes needed here)
 # ============================================================================
 
 def validate_config():
     """Validate configuration and check if required files exist."""
     import logging
     logging.basicConfig(level=logging.INFO)
-    
+
     print("="*60)
     print("CONFIGURATION VALIDATION")
     print("="*60)
@@ -180,7 +180,7 @@ def validate_config():
         'Processed Feature Metadata': PROCESSED_METADATA_PATH,
         'Spectrograms Directory': SPECTROGRAMS_DIR
     }
-    
+
     all_exist = True
     for name, path in checks.items():
         exists = path.exists()
@@ -188,7 +188,7 @@ def validate_config():
         print(f"{status} {name}: {path}")
         if not exists:
             all_exist = False
-    
+
     print("\nSplit ratios:")
     print(f"  Train: {1 - TEST_SIZE - VALIDATION_SIZE:.1%}")
     print(f"  Val:   {VALIDATION_SIZE:.1%}")
@@ -204,15 +204,16 @@ def validate_config():
     print(f"  Learning rate: {LEARNING_RATE}")
     print(f"  Epochs: {N_EPOCHS}")
     print(f"  Early stopping patience: {EARLY_STOPPING_PATIENCE}")
-    
+    print(f"  Dropout rate: {DROPOUT_RATE}")
+
     print("="*60)
-    
+
     if not all_exist:
         print("\n⚠ WARNING: Some required files are missing!")
         print("Please ensure data preprocessing is complete before training.")
     else:
         print("\n✓ All configuration checks passed!")
-    
+
     return all_exist
 
 

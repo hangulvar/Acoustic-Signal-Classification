@@ -9,3 +9,20 @@ A more extensive dataset is available on google drive locations provided here: (
 
 ### Preprocessing
 The data has been labeled and appended into a materdata. Deleted duplicate ID rows from tanker-metafile.
+
+## Cuda Setup
+
+To enable GPU acceleration, you must install the CUDA-enabled version of PyTorch.
+Run the following command in your virtual environment:
+
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+```
+
+To verify the installation:
+```bash
+python Test/check_gpu.py
+```
+
+
+

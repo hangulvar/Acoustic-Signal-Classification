@@ -11,6 +11,18 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
+# Import local modules and configuration
+try:
+    # Import all necessary parameters from the single source of truth
+    from dir_train_config import (
+        TIME_MASK_RATIO_MIN,TIME_MASK_RATIO_MAX,N_TIME_MASKS,
+        FREQ_MASK_RATIO_MIN,FREQ_MASK_RATIO_MAX,N_FREQ_MASKS,
+        TIME_SHIFT_RANGE,ADD_NOISE,NOISE_STD,AUGMENTATION_PROBABILITY
+    )
+except ImportError as e:
+    print(f"Error importing local modules: {e}")
+    print("Make sure you're running from the project root and all modules are available.")
+    #sys.exit(1)
 
 class SpectrogramAugmenter:
     """
@@ -22,14 +34,14 @@ class SpectrogramAugmenter:
     
     def __init__(
         self,
-        time_mask_ratio: Tuple[float, float] = (0.05, 0.15),
-        freq_mask_ratio: Tuple[float, float] = (0.05, 0.15),
-        n_time_masks: int = 2,
-        n_freq_masks: int = 2,
-        time_shift_range: int = 10,
-        add_noise: bool = True,
-        noise_std: float = 0.01,
-        apply_probability: float = 0.8,
+        time_mask_ratio: Tuple[float, float] = (TIME_MASK_RATIO_MIN, TIME_MASK_RATIO_MAX),
+        freq_mask_ratio: Tuple[float, float] = (FREQ_MASK_RATIO_MIN, FREQ_MASK_RATIO_MAX),
+        n_time_masks: int = N_TIME_MASKS,
+        n_freq_masks: int = N_FREQ_MASKS,
+        time_shift_range: int = TIME_SHIFT_RANGE,
+        add_noise: bool = ADD_NOISE,
+        noise_std: float = NOISE_STD,
+        apply_probability: float = AUGMENTATION_PROBABILITY,
         mask_value: float = 0.0
     ):
         """
@@ -206,14 +218,14 @@ def get_augmentation_pipeline(mode: str = 'train'):
     """
     if mode == 'train':
         return SpectrogramAugmenter(
-            time_mask_ratio=(0.05, 0.15),
-            freq_mask_ratio=(0.05, 0.15),
-            n_time_masks=2,
-            n_freq_masks=2,
-            time_shift_range=10,
-            add_noise=True,
-            noise_std=0.01,
-            apply_probability=0.8
+            time_mask_ratio= (TIME_MASK_RATIO_MIN, TIME_MASK_RATIO_MAX),
+            freq_mask_ratio=(FREQ_MASK_RATIO_MIN, FREQ_MASK_RATIO_MAX),
+            n_time_masks=N_TIME_MASKS,
+            n_freq_masks=N_FREQ_MASKS,
+            time_shift_range= TIME_SHIFT_RANGE,
+            add_noise=ADD_NOISE,
+            noise_std= NOISE_STD,
+            apply_probability= AUGMENTATION_PROBABILITY
         )
     else:
         # No augmentation for validation and test
