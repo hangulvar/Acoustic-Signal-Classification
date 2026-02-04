@@ -100,6 +100,10 @@ INPUT_CHANNELS = 1
 # Reduced dropout slightly. Goal is to first overfit, then regularize.
 DROPOUT_RATE = 0.4
 
+# New: Model architecture options for optimized pipeline
+MODEL_DEPTH = 4  # 4 or 5 convolutional blocks (4 is default, less prone to overfitting)
+USE_RESIDUAL = False  # Enable residual connections (experimental)
+
 # ============================================================================
 # TRAINING PARAMETERS
 # ============================================================================
@@ -116,8 +120,14 @@ N_EPOCHS = 80
 EARLY_STOPPING_PATIENCE = 15
 
 # Learning rate scheduler
+SCHEDULER_TYPE = 'plateau'  # 'plateau' or 'cosine' - controls which scheduler to use
 LR_SCHEDULER_PATIENCE = 5
 LR_SCHEDULER_FACTOR = 0.5
+
+# Cosine Annealing parameters (used if SCHEDULER_TYPE = 'cosine')
+COSINE_T0 = 10  # Restart every 10 epochs
+COSINE_T_MULT = 2  # Double the restart interval each time
+COSINE_ETA_MIN = 1e-6  # Minimum learning rate
 
 # Class weighting
 USE_CLASS_WEIGHTS = True
@@ -138,6 +148,7 @@ DROP_LAST_TRAIN = True
 # Model checkpoints
 CHECKPOINT_DIR = OUTPUT_DIR / "checkpoints"
 SAVE_CHECKPOINT_EVERY = 10   # Save checkpoint every N epochs
+MAX_CHECKPOINTS_TO_KEEP = 3  # Keep best + last N periodic checkpoints
 
 # TensorBoard logs
 TENSORBOARD_DIR = OUTPUT_DIR / "runs"
@@ -146,6 +157,11 @@ TENSORBOARD_DIR = OUTPUT_DIR / "runs"
 RESULTS_DIR = OUTPUT_DIR / "results"
 TEST_RESULTS_FILE = RESULTS_DIR / "test_results.json"
 TRAINING_HISTORY_FILE = CHECKPOINT_DIR / "training_history.json"
+
+# Advanced features (experimental)
+USE_MIXED_PRECISION = False  # Enable mixed precision training (requires CUDA)
+USE_TTA = False  # Test-time augmentation for evaluation
+TTA_AUGMENTATIONS = 5  # Number of augmented versions for TTA
 
 # ============================================================================
 # VISUALIZATION PARAMETERS
